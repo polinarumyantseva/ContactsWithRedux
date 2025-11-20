@@ -1,10 +1,14 @@
 import { memo } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import { GroupContactsCard } from 'src/components';
-import { useAppSelector } from 'src/store/hooks';
+import { useGetGroupsQuery } from 'src/store/groupsReducer';
 
 export const GroupListPage = memo(() => {
-	const groups = useAppSelector((state) => state.groups);
+	const { data: groups } = useGetGroupsQuery();
+
+	if (!groups) {
+		return <div>Нет данных</div>;
+	}
 
 	return (
 		<Row xxl={4}>
