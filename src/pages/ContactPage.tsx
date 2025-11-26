@@ -1,18 +1,16 @@
+import { observer } from 'mobx-react-lite';
 import { Col, Row } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
-import { ContactDto } from 'src/types/dto/ContactDto';
 import { ContactCard, Empty } from 'src/components';
-import { useGetContactsQuery } from 'src/store/contactsReduser';
+import { contactsStore } from 'src/store/contactsStore';
 
-export const ContactPage = () => {
+export const ContactPage = observer(() => {
 	const { contactId } = useParams<{ contactId: string }>();
-	const { data: allContacts } = useGetContactsQuery();
-
-	const contact: ContactDto | undefined = (allContacts || []).find(({ id }) => id === contactId);
+	const contact = contactId ? contactsStore.getContactById(contactId) : undefined;
 
 	return (
 		<Row xxl={3}>
 			<Col className={'mx-auto'}>{contact ? <ContactCard contact={contact} /> : <Empty />}</Col>
 		</Row>
 	);
-};
+});
