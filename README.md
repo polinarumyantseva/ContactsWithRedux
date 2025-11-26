@@ -1,1 +1,9 @@
-# ContactsWithRedux
+## Установка зависимостей
+```bash
+npm i
+```
+
+## Запуск приложения
+```bash
+npm start
+```
