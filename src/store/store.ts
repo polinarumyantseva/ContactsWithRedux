@@ -1,15 +1,20 @@
-import { createStore, combineReducers, applyMiddleware } from 'redux';
-import { contactsReduser } from './contactsReduser';
-import { groupsReducer } from './groupsReducer';
-import { favoritesReducer } from './favoritesReducer';
+import { combineReducers } from 'redux';
+import { configureStore } from '@reduxjs/toolkit';
+import { contactsApiSlice, filteredContactsSlise } from './contactsReduser';
+import { groupsApiSlice } from './groupsReducer';
 
 const rootReducer = combineReducers({
-	contacts: contactsReduser,
-	favorites: favoritesReducer,
-	groups: groupsReducer,
+	filteredContacts: filteredContactsSlise.reducer,
+	[contactsApiSlice.reducerPath]: contactsApiSlice.reducer,
+	[groupsApiSlice.reducerPath]: groupsApiSlice.reducer,
 });
 
-export const store = createStore(rootReducer);
+export const store = configureStore({
+	reducer: rootReducer,
+	devTools: true,
+	middleware: (getDefaultMiddleware) =>
+		getDefaultMiddleware().concat(contactsApiSlice.middleware, groupsApiSlice.middleware),
+});
 
 export type RootState = ReturnType<typeof rootReducer>;
 export type AppDispatch = typeof store.dispatch;

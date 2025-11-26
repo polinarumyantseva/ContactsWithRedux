@@ -1,18 +1,21 @@
 import { Col, Row } from 'react-bootstrap';
 import { ContactCard } from './ContactCard';
 import { useAppSelector } from 'src/store/hooks';
+import { useGetFavoriteContactsQuery } from 'src/store/contactsReduser';
 
 interface ContactListProps {
 	showOnlyFavorites?: boolean;
 }
 
 export const ContactList = ({ showOnlyFavorites = false }: ContactListProps) => {
-	const contacts = useAppSelector((state) => state.contacts);
-	const favorites = useAppSelector((state) => state.favorites);
+	const filteredContacts = useAppSelector((state) => state.filteredContacts);
+	const { data: favorites } = useGetFavoriteContactsQuery();
 
-	const displayedContacts = showOnlyFavorites
-		? contacts.allContacts.filter((contact) => favorites.includes(contact.id))
-		: contacts.filtered;
+	const displayedContacts = showOnlyFavorites ? favorites : filteredContacts;
+
+	if (!displayedContacts) {
+		return <div>Нет данных</div>;
+	}
 
 	return (
 		<Row xxl={4} className='g-4'>

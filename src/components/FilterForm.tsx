@@ -10,7 +10,7 @@ export interface FilterFormValues {
 }
 
 interface FilterFormProps extends FormikConfig<Partial<FilterFormValues>> {
-	groupContactsList: GroupContactsDto[];
+	groupContactsList?: GroupContactsDto[];
 }
 
 export const FilterForm = memo<FilterFormProps>(({ onSubmit, initialValues = {}, groupContactsList }) => {
@@ -30,21 +30,24 @@ export const FilterForm = memo<FilterFormProps>(({ onSubmit, initialValues = {},
 								/>
 							</InputGroup>
 						</Col>
-						<Col>
-							<Form.Select
-								id={'groupId'}
-								name={'groupId'}
-								aria-label='Поиск по группе'
-								onChange={handleChange}
-							>
-								<option>Open this select menu</option>
-								{groupContactsList.map((groupContacts) => (
-									<option value={groupContacts.id} key={groupContacts.id}>
-										{groupContacts.name}
-									</option>
-								))}
-							</Form.Select>
-						</Col>
+						{groupContactsList && (
+							<Col>
+								<Form.Select
+									id={'groupId'}
+									name={'groupId'}
+									aria-label='Поиск по группе'
+									onChange={handleChange}
+								>
+									<option>Open this select menu</option>
+									{groupContactsList.map((groupContacts) => (
+										<option value={groupContacts.id} key={groupContacts.id}>
+											{groupContacts.name}
+										</option>
+									))}
+								</Form.Select>
+							</Col>
+						)}
+
 						<Col>
 							<Button variant={'primary'} type={'submit'}>
 								Применить
