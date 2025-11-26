@@ -1,21 +1,13 @@
-import { memo, useEffect } from 'react';
+import { observer } from 'mobx-react-lite';
 import { Col, Row } from 'react-bootstrap';
 import { ContactList, FilterForm, FilterFormValues } from 'src/components';
 import { ContactDto } from 'src/types/dto/ContactDto';
-import { useAppDispatch } from 'src/store/hooks';
-import { setFilteredContacts, useGetContactsQuery } from 'src/store/contactsReduser';
-import { useGetGroupsQuery } from 'src/store/groupsReducer';
+import { contactsStore } from 'src/store/contactsStore';
+import { groupsStore } from 'src/store/groupsStore';
 
-export const ContactListPage = memo(() => {
-	const dispatch = useAppDispatch();
-	const { data: groups } = useGetGroupsQuery();
-	const { data: allContacts } = useGetContactsQuery();
-
-	useEffect(() => {
-		if (allContacts && allContacts.length > 0) {
-			dispatch(setFilteredContacts(allContacts));
-		}
-	}, [allContacts, dispatch]);
+export const ContactListPage = observer(() => {
+	const groups = groupsStore.groups;
+	const allContacts = contactsStore.contacts;
 
 	const onSubmit = (fv: Partial<FilterFormValues>) => {
 		let findContacts: ContactDto[] = allContacts || [];
@@ -33,7 +25,7 @@ export const ContactListPage = memo(() => {
 			}
 		}
 
-		dispatch(setFilteredContacts(findContacts));
+		contactsStore.setFilteredContacts(findContacts);
 	};
 
 	return (

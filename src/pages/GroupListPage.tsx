@@ -1,10 +1,10 @@
-import { memo } from 'react';
+import { observer } from 'mobx-react-lite';
 import { Col, Row } from 'react-bootstrap';
 import { GroupContactsCard } from 'src/components';
-import { useGetGroupsQuery } from 'src/store/groupsReducer';
+import { groupsStore } from 'src/store/groupsStore';
 
-export const GroupListPage = memo(() => {
-	const { data: groups } = useGetGroupsQuery();
+export const GroupListPage = observer(() => {
+	const groups = groupsStore.groups;
 
 	if (!groups) {
 		return <div>Нет данных</div>;
