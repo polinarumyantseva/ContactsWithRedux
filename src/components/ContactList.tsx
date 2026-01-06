@@ -1,16 +1,15 @@
 import { Col, Row } from 'react-bootstrap';
 import { ContactCard } from './ContactCard';
-import { useAppSelector } from 'src/store/hooks';
-import { useGetFavoriteContactsQuery } from 'src/store/contactsReduser';
+import { contactsStore } from 'src/store/contactsStore';
+import { observer } from 'mobx-react-lite';
 
 interface ContactListProps {
 	showOnlyFavorites?: boolean;
 }
 
-export const ContactList = ({ showOnlyFavorites = false }: ContactListProps) => {
-	const filteredContacts = useAppSelector((state) => state.filteredContacts);
-	const { data: favorites } = useGetFavoriteContactsQuery();
-
+export const ContactList = observer(({ showOnlyFavorites = false }: ContactListProps) => {
+	const filteredContacts = contactsStore.filteredContacts;
+	const favorites = contactsStore.getFavoriteContacts();
 	const displayedContacts = showOnlyFavorites ? favorites : filteredContacts;
 
 	if (!displayedContacts) {
@@ -26,4 +25,4 @@ export const ContactList = ({ showOnlyFavorites = false }: ContactListProps) => 
 			))}
 		</Row>
 	);
-};
+});
